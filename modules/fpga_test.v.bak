@@ -1,0 +1,35 @@
+module fpga_test
+
+reg clk = 0;
+always #1 clk = ~clk;
+reg reset = 0;
+initial begin
+	@(posedge clk)
+	reset <= 1;
+	repeat(6) @(negedge clk);
+	reset <= 0;
+end
+reg button;
+reg button_p, button_u;
+reg push;
+reg [3:0] counter;
+wire [7:0] bus;
+
+always @(posedge clk) begin
+	button_p = button;
+	button_u <= button_p;
+	push <= button_u & ~button_p;
+end
+
+always @(posedge clk) begin
+	if (push) {
+		counter = counter + 1;
+	}
+end
+
+hex2digit first_digit(
+	.hex(counter),
+	.digit(bus)
+)
+
+endmodule 
