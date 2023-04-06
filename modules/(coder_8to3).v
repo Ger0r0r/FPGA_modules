@@ -14,24 +14,3 @@ module coder(
 					{3{(step>>7) == 8'b1}} & 3'b111;
 
 endmodule
-
-module top;
-
-reg	[7:0]data_in = 8'b1;
-wire [2:0]data_out;
-reg [2:0]test[7:0];
-
-always begin
-	#2 
-	data_in = data_in + 1'b1;
-end
-
-initial #1000$stop;
-
-coder
-	test01(
-		.step(data_in), 
-		.answer(data_out)
-	);
- 
-endmodule
