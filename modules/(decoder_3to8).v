@@ -5,5 +5,4 @@ module decoder_3to8
 	output	[7:0]	answer
 );
 	assign answer = 1'b1<<step;
-
 endmodule

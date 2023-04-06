@@ -1,18 +1,18 @@
 `timescale 1ns/100ps
-module digit_counter
+module led_counter
 (
-	input	[0:0]	reset,
-	input	[0:0]	clock,
-	input	[0:0]	button_increase,
-	input	[0:0]	button_decrease,
-	output	[6:0]	digit
+	input	wire	reset,
+	input	wire	clock,
+	input	wire	button_increase,
+	input	wire	button_decrease,
+	output	[7:0]	led
 );
 
 reg [6:0] number;
 
 always @(posedge reset)
 begin
-	number = 7'b0000000;
+	number = 8'b00000000;
 end
 
 reg [0:0] f_add;
@@ -37,10 +37,10 @@ button_handler button_minus
 	.button_flag(f_minus)
 );
 
-hex2digit convert_number_to_digit
+decoder_3to8_full convert_number_to_led
 (
-	.hex(number),
-	.digit(digit)
+	.value(number),
+	.answer(led)
 )
 
 endmodule
