@@ -1,11 +1,14 @@
 `timescale 1ns/100ps
 module hex2digit
+#(
+	parameter INVERT = 1
+)
 (
 	input	[3:0]	hex,
 	output	[6:0]	digit
 );
 
-assign digit = 	{7(hex == 7'h0)} & 7'b1000000 |
+assign digit = ({7(hex == 7'h0)} & 7'b1000000 |
 				{7(hex == 7'h1)} & 7'b1111001 |
 				{7(hex == 7'h2)} & 7'b1011011 |
 				{7(hex == 7'h3)} & 7'b1001111 |
@@ -20,6 +23,5 @@ assign digit = 	{7(hex == 7'h0)} & 7'b1000000 |
 				{7(hex == 7'hC)} & 7'b1000110 |
 				{7(hex == 7'hD)} & 7'b0100001 | 
 				{7(hex == 7'hE)} & 7'b0001110 |
-				{7(hex == 7'hF)} & 7'b0000110 |
-
+				{7(hex == 7'hF)} & 7'b0000110) ^ INVERT;
 endmodule
