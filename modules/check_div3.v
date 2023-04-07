@@ -1,7 +1,8 @@
 `timescale 1ns/100ps
-module check_between(
-	input [15:0]number,
-	output [15:0]answer
+module check_between
+(
+	input	[15:0]	number,
+	output	[15:0]	answer
 );
 
 	assign answer = number[0]  + 
@@ -22,7 +23,8 @@ module check_between(
 					  number[15])<<1);
 endmodule
 
-module check_division_by_3(
+module check_division_by_3
+(
 	input [15:0] number,
 	output answer
 );
@@ -31,45 +33,24 @@ wire [15:0] w_between1;
 wire [15:0] w_between2;
 wire [15:0] w_between3;
 
-check_between
-	check_1(
-		.number(number),
-		.answer(w_between1)
-	);
+check_between check_1
+(
+	.number(number),
+	.answer(w_between1)
+);
 
-check_between
-	check_2(
-		.number(w_between1),
-		.answer(w_between2)
-	);
+check_between check_2
+(
+	.number(w_between1),
+	.answer(w_between2)
+);
 
-check_between
-	check_3(
-		.number(w_between2),
-		.answer(w_between3)
-	);
+check_between check_3
+(
+	.number(w_between2),
+	.answer(w_between3)
+);
 
 	assign answer = ((w_between3 == 16'd0)  | 
 					 (w_between3 == 16'd3));
-
-endmodule
-
-module top;
-
-reg	[15:0]data_in = 16'b1;
-wire data_out;
-
-always begin
-	#2 
-	data_in = data_in + 1'b1;
-end
-
-initial #1000$stop;
-
-check_division_by_3
-	test01(
-		.number(data_in), 
-		.answer(data_out)
-	);
- 
 endmodule

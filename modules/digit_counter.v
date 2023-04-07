@@ -5,32 +5,36 @@ module digit_counter
 	input	[0:0]	clock,
 	input	[0:0]	button_increase,
 	input	[0:0]	button_decrease,
-	output	[6:0]	digit
+	output	[3:0]	digit
 );
 
-reg [6:0] number;
+reg [3:0] number;
 
-always @(posedge reset)
-begin
-	number = 7'b0000000;
-end
-
-reg [0:0] f_add;
-reg [0:0] f_minus;
+wire [0:0] f_add;
+wire [0:0] f_minus;
+wire [0:0] f_reset;
 
 always @(posedge clock)
 begin
-	number <= (f_add) ? number + 1 : number;
-	number <= (f_minus) ? number - 1 : number;
+	if (f_reset)
+		number <= 4'b0000;
+	else 
+		number <= number + f_add - f_minus;
 end
 
-button_handler button_add
+button_handler_down button_reset
+(
+	.clock(clock),
+	.button_signal(reset),
+	.button_flag(f_reset)
+);
+button_handler_down button_add
 (
 	.clock(clock),
 	.button_signal(button_increase),
 	.button_flag(f_add)
 );
-button_handler button_minus
+button_handler_down button_minus
 (
 	.clock(clock),
 	.button_signal(button_decrease),
@@ -41,6 +45,6 @@ hex2digit convert_number_to_digit
 (
 	.hex(number),
 	.digit(digit)
-)
+);
 
 endmodule

@@ -1,5 +1,6 @@
 `timescale 1ns/100ps
-module coder(
+module coder
+(
 	input [7:0]step,
 	output [2:0]answer
 );
@@ -12,5 +13,4 @@ module coder(
 					{3{(step>>5) == 8'b1}} & 3'b101 |
 					{3{(step>>6) == 8'b1}} & 3'b110 |
 					{3{(step>>7) == 8'b1}} & 3'b111;
-
 endmodule

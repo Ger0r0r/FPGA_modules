@@ -8,7 +8,7 @@ module led_counter
 	output	[7:0]	led
 );
 
-reg [6:0] number;
+reg [2:0] number;
 
 always @(posedge reset)
 begin
@@ -24,13 +24,13 @@ begin
 	number <= (f_minus) ? number - 1 : number;
 end
 
-button_handler button_add
+button_handler_down button_add
 (
 	.clock(clock),
 	.button_signal(button_increase),
 	.button_flag(f_add)
 );
-button_handler button_minus
+button_handler_down button_minus
 (
 	.clock(clock),
 	.button_signal(button_decrease),
@@ -41,6 +41,6 @@ decoder_3to8_full convert_number_to_led
 (
 	.value(number),
 	.answer(led)
-)
+);
 
 endmodule
