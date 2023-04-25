@@ -12,66 +12,55 @@ module notations
 	output	wire	[7:0]	led
 );
 
-assign led = switchers;
-
 wire flag;
-reg [7:0] temp;
+reg [20:0] temp;
 reg [7:0] display;
+
+assign led = switchers;
+assign overload = temp[20];
 
 always @(posedge clock)
 begin
 	if (!reset)
-		temp = 8'b00000000;
+	begin
+		temp[20:0] <= 21'b0;
+		display[7:0] <= 8'b0;
+	end
 	else
 	begin
 		if (flag)
 		begin
-			temp <= switchers;
+			temp[7:0] <= switchers;
+			display[7:0] <= switchers;
 		end
-	end
-end
+		else
+		begin
+			if (temp[19:16] > 4'b0) temp[20] <= 1'b1;
+			else 					temp[20] <= 1'b0;
 
-always @(posedge clock)
-begin
-	if (temp[3:0] >= 4'b1010) 
-	begin
-		if (temp[7:4] + 1'b1 >= 4'b1010) 
-		begin
-			assign overload = 1'b1;
-			display <= temp[7:0] - 8'b10011010;
-		end
-		else
-		begin
-			assign overload = 1'b0;
-			display <= temp[7:0] - 8'b00000110;
-		end
-	end
-	else
-	begin
-		if (temp[7:4] >= 4'b1010) 
-		begin
-			assign overload = 1'b1;
-			display <= temp[7:0] - 8'b10100000;
-		end
-		else
-		begin
-			assign overload = 1'b0;
+			if (temp[7:0] != 8'b0) 
+			begin
+				if (temp[11:8] >= 4'b0101) temp[11:8] <= temp[11:8] + 4'b0011;
+				if (temp[15:12] >= 4'b0101) temp[15:12] <= temp[15:12] + 4'b0011;
+				if (temp[19:16] >= 4'b0101) temp[19:16] <= temp[19:16] + 4'b0011;
+				temp[19:0] <= {temp[18:0], 1'b0};
+			end
 		end
 	end
 end
 
 hex22digit_hex show_hex
 (
-	.hex(temp),
+	.hex(display),
 	.digit_0(hex_digits[13:7]),
 	.digit_1(hex_digits[6:0])
 );
 
 hex22digit_dec show_dec
 (
-	.hex(display),
-	.digit_0(hex_digits[13:7]),
-	.digit_1(hex_digits[6:0])
+	.hex(temp[15:8]),
+	.digit_0(dec_digits[13:7]),
+	.digit_1(dec_digits[6:0])
 );
 
 button_handler_down calculation
