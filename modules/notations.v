@@ -1,5 +1,5 @@
 `timescale 1ns/100ps
-module shift_register
+module notations
 (
 	input	wire	clock,
 	input	wire	reset,
