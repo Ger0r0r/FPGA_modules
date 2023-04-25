@@ -64,8 +64,7 @@ module hex2digit_dec
 )
 (
 	input	wire	[3:0]	hex,
-	output	wire	[6:0]	digit_0,
-	output	wire	[6:0]	digit_1
+	output	wire	[6:0]	digit
 );
 	wire [6:0] temp;
 	assign temp =  ({7{hex == 7'd0}} & 7'b1000000 |
@@ -77,7 +76,7 @@ module hex2digit_dec
 					{7{hex == 7'd6}} & 7'b0000010 |
 					{7{hex == 7'd7}} & 7'b1111000 |
 					{7{hex == 7'd8}} & 7'b0000000 |
-					{7{hex == 7'd9}} & 7'b0010000;
+					{7{hex == 7'd9}} & 7'b0010000);
 
 	assign digit = (INVERT) ? temp : ~temp;
 endmodule
@@ -88,7 +87,8 @@ module hex22digit_dec
 )
 (
 	input	wire	[7:0]	hex,
-	output	wire	[6:0]	digit
+	output	wire	[6:0]	digit_0,
+	output	wire	[6:0]	digit_1
 );
 
 hex2digit_dec
