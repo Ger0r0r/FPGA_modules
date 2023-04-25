@@ -41,7 +41,7 @@ button_handler_down button_minus
 	.button_flag(f_minus)
 );
 
-hex2digit convert_number_to_digit
+hex2digit_hex convert_number_to_digit
 (
 	.hex(number),
 	.digit(digit)

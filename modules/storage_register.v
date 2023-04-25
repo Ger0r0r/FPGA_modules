@@ -71,12 +71,12 @@ begin
 	end
 end
 
-hex2digit handler_digit_0
+hex2digit_hex handler_digit_0
 (
 	.hex(hex[7:4]),
 	.digit(digit_0)
 );
-hex2digit handler_digit_1
+hex2digit_hex handler_digit_1
 (
 	.hex(hex[3:0]),
 	.digit(digit_1)

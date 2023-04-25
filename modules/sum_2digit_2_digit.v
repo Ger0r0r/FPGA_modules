@@ -39,19 +39,19 @@ end
 
 	assign overload = answer[8];
 
-hex22digit handler_digits_0
+hex22digit_hex handler_digits_0
 (
 	.hex(number_0),
 	.digit_0(digits_0[6:0]),
 	.digit_1(digits_0[13:7])
 );
-hex22digit handler_digits_1
+hex22digit_hex handler_digits_1
 (
 	.hex(number_1),
 	.digit_0(digits_1[6:0]),
 	.digit_1(digits_1[13:7])
 );
-hex22digit handler_answer
+hex22digit_hex handler_answer
 (
 	.hex(answer[7:0]),
 	.digit_0(digits_2[6:0]),
