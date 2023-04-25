@@ -7,24 +7,13 @@ module shift_register
 	input	wire	button_right,
 	input	wire	switch_left,
 	input	wire	switch_right,
-	output	wire [7:0]	led
+	output	wire	[7:0]	led
 );
 
 reg [7:0] temp;
-reg [7:0] temp_wire;
-reg [2:0] shift;
 
-always @(posedge clock) 
-begin
-	temp_wire <=	{8{shift == 3'b111}} & {temp[1],temp[2],temp[3],temp[4],temp[5],temp[6],temp[7],temp[0]} |
-						{8{shift == 3'b110}} & {temp[2],temp[3],temp[4],temp[5],temp[6],temp[7],temp[0],temp[1]} |
-						{8{shift == 3'b101}} & {temp[3],temp[4],temp[5],temp[6],temp[7],temp[0],temp[1],temp[2]} |
-						{8{shift == 3'b100}} & {temp[4],temp[5],temp[6],temp[7],temp[0],temp[1],temp[2],temp[3]} |
-						{8{shift == 3'b011}} & {temp[5],temp[6],temp[7],temp[0],temp[1],temp[2],temp[3],temp[4]} |
-						{8{shift == 3'b010}} & {temp[6],temp[7],temp[0],temp[1],temp[2],temp[3],temp[4],temp[5]} |
-						{8{shift == 3'b001}} & {temp[7],temp[0],temp[1],temp[2],temp[3],temp[4],temp[5],temp[6]} |
-						{8{shift == 3'b000}} & temp;
-end
+wire flag_right;
+wire flag_left;
 
 always @(posedge clock)
 begin
@@ -32,13 +21,18 @@ begin
 		temp = 8'b00000000;
 	else
 	begin
-		temp[shift] <= (flag_right) ? switch_right : temp[shift];
-		temp[shift] <= (flag_left) ? switch_left : temp[shift];
+		if (flag_left)
+		begin
+			temp[7:1] <= temp[6:0];
+			temp[0] <= (switch_left) ? 1'b1 : 1'b0;
+		end
+		if (flag_right)
+		begin
+			temp[6:0] <= temp[7:1];
+			temp[7] <= (switch_right) ? 1'b1 : 1'b0;
+		end
 	end
 end
-
-wire flag_right;
-wire flag_left;
 
 button_handler_down handler_left
 (
@@ -54,10 +48,5 @@ button_handler_down handler_right
 	.button_flag(flag_right)
 );
 
-always @(posedge clock)
-begin
-	shift = shift + flag_right - flag_left;
-end
-
-	assign led = temp_wire;
+	assign led = temp;
 endmodule

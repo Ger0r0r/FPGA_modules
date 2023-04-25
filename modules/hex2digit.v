@@ -4,11 +4,12 @@ module hex2digit
 	parameter INVERT = 1
 )
 (
-	input	[3:0]	hex,
-	output	[6:0]	digit
+	input	wire	[3:0]	hex,
+	output	wire	[6:0]	digit
 );
 
-	assign digit = ({7{hex == 7'h0}} & 7'b1000000 |
+	wire [6:0] temp;
+	assign temp =  ({7{hex == 7'h0}} & 7'b1000000 |
 					{7{hex == 7'h1}} & 7'b1111001 |
 					{7{hex == 7'h2}} & 7'b0100100 |
 					{7{hex == 7'h3}} & 7'b0110000 |
@@ -25,5 +26,34 @@ module hex2digit
 					{7{hex == 7'hE}} & 7'b0000110 |
 					{7{hex == 7'hF}} & 7'b0001110);
 
-	assign digit = digit ^ {7{INVERT}};
+	assign digit = (INVERT) ? temp : ~temp;
+endmodule
+
+module hex22digit
+#(
+	parameter INVERT = 1
+)
+(
+	input	wire	[7:0]	hex,
+	output	wire	[6:0]	digit_0,
+	output	wire	[6:0]	digit_1
+);
+
+hex2digit 
+#(
+	.INVERT(INVERT)
+) h_digit_0
+(
+	.hex(hex[3:0]),
+	.digit(digit_0)
+);
+
+hex2digit 
+#(
+	.INVERT(INVERT)
+) h_digit_1
+(
+	.hex(hex[7:4]),
+	.digit(digit_1)
+);
 endmodule
