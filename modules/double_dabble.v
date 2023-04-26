@@ -8,7 +8,7 @@ module double_dabble
 (
 	input	wire	clock,
 	input	wire	reset,
-	intput	wire	[NBITS - 1:0]	binary, // bin[NBITS]
+	input	wire	[NBITS - 1:0]	binary, // bin[NBITS]
 
 	output	wire	[DEC_BITS - 1:0]	decimal // dec[4][NDECS]
 );
